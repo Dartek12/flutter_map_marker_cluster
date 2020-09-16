@@ -3,39 +3,40 @@ import 'dart:math';
 class DistanceGrid<T> {
   final num cellSize;
 
-  num _sqCellSize;
-  Map<num, Map<num, List<T>>> _grid = {};
-  Map<T, Point> _objectPoint = {};
+  final num _sqCellSize;
+  final Map<num, Map<num, List<T>>> _grid = {};
+  final Map<T, Point> _objectPoint = {};
 
   DistanceGrid(this.cellSize) : _sqCellSize = cellSize * cellSize;
 
-  addObject(T obj, Point point) {
-    var x = _getCoord(point.x), y = _getCoord(point.y);
-    var row = _grid[y] ??= {};
-    var cell = row[x] ??= [];
+  void addObject(T obj, Point point) {
+    final x = _getCoord(point.x), y = _getCoord(point.y);
+    final row = _grid[y] ??= {};
+    final cell = row[x] ??= [];
 
     _objectPoint[obj] = point;
 
     cell.add(obj);
   }
 
-  updateObject(T obj, Point point) {
+  void updateObject(T obj, Point point) {
     removeObject(obj);
     addObject(obj, point);
   }
 
-  //Returns true if the object was found
+  /// Returns true if the object was found
   bool removeObject(T obj) {
-    var point = _objectPoint[obj];
+    final point = _objectPoint[obj];
     if (point == null) return false;
 
-    var x = _getCoord(point.x), y = _getCoord(point.y);
-    var row = _grid[y] ??= {};
-    var cell = row[x] ??= [];
+    final x = _getCoord(point.x), y = _getCoord(point.y);
+    final row = _grid[y] ??= {};
+    final cell = row[x] ??= [];
 
     _objectPoint.remove(obj);
 
-    for (var i = 0, len = cell.length; i < len; i++) {
+    final len = cell.length;
+    for (int i = 0; i < len; i++) {
       if (cell[i] == obj) {
         cell.removeAt(i);
 
@@ -53,14 +54,14 @@ class DistanceGrid<T> {
     return false;
   }
 
-  eachObject(Function(T) fn) {
-    for (var i in _grid.keys) {
-      var row = _grid[i];
+  void eachObject(Function(T) fn) {
+    for (final i in _grid.keys) {
+      final row = _grid[i];
 
-      for (var j in row.keys) {
-        var cell = row[j];
-
-        for (var k = 0, len = cell.length; k < len; k++) {
+      for (final j in row.keys) {
+        final cell = row[j];
+        final len = cell.length;
+        for (int k = 0; k < len; k++) {
           fn(cell[k]);
         }
       }
@@ -68,20 +69,20 @@ class DistanceGrid<T> {
   }
 
   T getNearObject(Point point) {
-    var x = _getCoord(point.x),
-        y = _getCoord(point.y),
-        closestDistSq = _sqCellSize;
+    final x = _getCoord(point.x), y = _getCoord(point.y);
+    num closestDistSq = _sqCellSize;
     T closest;
 
     for (var i = y - 1; i <= y + 1; i++) {
-      var row = this._grid[i];
+      final row = _grid[i];
       if (row != null) {
         for (var j = x - 1; j <= x + 1; j++) {
-          var cell = row[j];
+          final cell = row[j];
           if (cell != null) {
-            for (var k = 0, len = cell.length; k < len; k++) {
-              var obj = cell[k];
-              var dist = _sqDist(_objectPoint[obj], point);
+            final len = cell.length;
+            for (int k = 0; k < len; k++) {
+              final obj = cell[k];
+              final dist = _sqDist(_objectPoint[obj], point);
 
               if (dist < closestDistSq ||
                   dist <= closestDistSq && closest == null) {
@@ -97,12 +98,12 @@ class DistanceGrid<T> {
   }
 
   num _getCoord(num x) {
-    var coord = x / cellSize;
+    final coord = x / cellSize;
     return coord.isFinite ? coord.floor() : x;
   }
 
   num _sqDist(Point p1, Point p2) {
-    var dx = p2.x - p1.x, dy = p2.y - p1.y;
+    final dx = p2.x - p1.x, dy = p2.y - p1.y;
     return dx * dx + dy * dy;
   }
 }

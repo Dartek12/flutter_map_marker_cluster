@@ -33,11 +33,11 @@ class Spiderfy {
   }
 
   static List<Point> circle(int radius, int count, Point center) {
-    double angleStep = pi2 / count;
+    final double angleStep = pi2 / count;
     final result = List<Point>(count);
 
     for (var i = 0; i < count; i++) {
-      double angle = circleStartAngle + i * angleStep;
+      final double angle = circleStartAngle + i * angleStep;
 
       result[i] = CustomPoint<double>(
           center.x + radius * cos(angle), center.y + radius * sin(angle));

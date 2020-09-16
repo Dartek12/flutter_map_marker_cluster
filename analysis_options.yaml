@@ -2,4 +2,8 @@ include: package:pedantic/analysis_options.yaml
 
 linter:
   rules:
-    curly_braces_in_flow_control_structures: false
+    camel_case_types: true
+    prefer_final_in_for_each: true
+    prefer_final_locals: true
+    prefer_generic_function_type_aliases: false
+    omit_local_variable_types: false
