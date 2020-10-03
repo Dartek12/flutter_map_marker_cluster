@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -72,6 +73,9 @@ class MarkerClusterLayerOptions extends LayerOptions {
   /// A cluster will cover at most this many pixels from its center
   final int maxClusterRadius;
 
+  /// A function to compute at most how many pixels a cluster will cover
+  final int Function(int) computeMaxClusterRadius;
+
   /// Options for fit bounds
   final FitBoundsOptions fitBoundsOptions;
 
@@ -125,6 +129,7 @@ class MarkerClusterLayerOptions extends LayerOptions {
     this.computeSize,
     this.anchor,
     this.maxClusterRadius = 80,
+    this.computeMaxClusterRadius,
     this.disableClusteringAtZoom = 20,
     this.animationsOptions = const AnimationsOptions(),
     this.fitBoundsOptions =

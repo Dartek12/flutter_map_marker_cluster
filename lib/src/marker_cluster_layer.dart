@@ -94,10 +94,14 @@ class _MarkerClusterLayerState extends State<MarkerClusterLayer>
   }
 
   void _initializeClusters() {
+    final computeMaxClusterRadius = widget.options.computeMaxClusterRadius ??
+        (_) => widget.options.maxClusterRadius;
+
     // set up DistanceGrids for each zoom
     for (var zoom = _maxZoom; zoom >= _minZoom; zoom--) {
-      _gridClusters[zoom] = DistanceGrid(widget.options.maxClusterRadius);
-      _gridUnclustered[zoom] = DistanceGrid(widget.options.maxClusterRadius);
+      final maxClusterRadius = computeMaxClusterRadius(zoom);
+      _gridClusters[zoom] = DistanceGrid(maxClusterRadius);
+      _gridUnclustered[zoom] = DistanceGrid(maxClusterRadius);
     }
 
     _topClusterLevel = MarkerClusterNode(
