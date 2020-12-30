@@ -122,6 +122,9 @@ class MarkerClusterLayerOptions extends LayerOptions {
   /// Popup's options that show when tapping markers or via the PopupController.
   final PopupOptions popupOptions;
 
+  /// Whether should spiderfy when can not zoom.
+  final bool canSpiderfyOnClick;
+
   MarkerClusterLayerOptions({
     @required this.builder,
     this.markers = const [],
@@ -146,5 +149,6 @@ class MarkerClusterLayerOptions extends LayerOptions {
     this.onClusterTap,
     this.onMarkersClustered,
     this.popupOptions,
+    this.canSpiderfyOnClick = true,
   }) : assert(builder != null);
 }
